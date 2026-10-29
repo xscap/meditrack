@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+*{
+  font-family: "Poppins", sans-serif !important;
+}
+
+.welcome-page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.5rem;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(23, 107, 255, 0.12), transparent 42%),
+    #f7f9fc;
+}
+
+.welcome-content {
+  width: 100%;
+  max-width: 30rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.welcome-mark {
+  width: 4rem;
+  height: 4rem;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1.75rem;
+  border-radius: 1.25rem;
+  color: #fff;
+  background: #176bff;
+  box-shadow: 0 16px 40px rgba(23, 107, 255, 0.22);
+}
+
+.welcome-mark__cross {
+  font-family: Arial, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.welcome-title.MuiTypography-root {
+  color: #142033;
+  font-size: clamp(2.5rem, 8vw, 3rem);
+  font-weight: 800;
+  line-height: 1.02;
+}
+
+.welcome-description.MuiTypography-root {
+  max-width: 24.375rem;
+  margin: 1.125rem auto 0;
+  color: rgba(20, 32, 51, 0.68);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.welcome-actions {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2.25rem;
+}
+
+.welcome-button.MuiButton-root {
+  min-height: 3.5rem;
+  border-radius: 1rem;
+  padding-inline: 1.375rem;
+  font-size: 1rem;
+  font-weight: 750;
+  text-transform: none;
+}
+
+.welcome-button.MuiButton-root:focus-visible {
+  outline: 4px solid rgba(23, 107, 255, 0.35);
+  outline-offset: 3px;
+}
+
+.welcome-button--primary.MuiButton-root {
+  color: #fff;
+  background: #176bff;
+  box-shadow: 0 10px 24px rgba(23, 107, 255, 0.2);
+}
+
+.welcome-button--primary.MuiButton-root:hover {
+  background: #0f5de6;
+  box-shadow: 0 14px 30px rgba(23, 107, 255, 0.26);
+}
+
+.welcome-button--secondary.MuiButton-root {
+  color: #123b82;
+  background: #e8f0ff;
+  box-shadow: none;
+}
+
+.welcome-button--secondary.MuiButton-root:hover {
+  background: #dce8ff;
+  box-shadow: none;
+}

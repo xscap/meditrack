@@ -1,0 +1,96 @@
+.medicine-count {
+	display: grid;
+	gap: 24px;
+	width: 100%;
+}
+
+.medicine-count-heading {
+	display: grid;
+	gap: 4px;
+}
+
+.medicine-count-title {
+	color: #183a32;
+	font-size: 24px;
+	font-weight: 600;
+}
+
+.medicine-count-subtitle {
+	color: #687871;
+	font-size: 14px;
+}
+
+.medicine-metrics-grid {
+	display: grid;
+	gap: 20px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.medicine-metric {
+	--metric-accent: #27866d;
+
+	aspect-ratio: 1;
+	background: #ffffff;
+	border: 1px solid #e0e9e4;
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgb(27 68 55 / 5%);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-width: 0;
+	overflow: hidden;
+	padding: clamp(18px, 3vw, 30px);
+	position: relative;
+}
+
+.medicine-metric::before {
+	background: var(--metric-accent);
+	content: "";
+	height: 4px;
+	inset: 0 0 auto;
+	position: absolute;
+}
+
+.medicine-metric--treatments {
+	--metric-accent: #64889b;
+}
+
+.medicine-metric--refills {
+	--metric-accent: #bd8650;
+}
+
+.medicine-metric-title {
+	color: #42564e;
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.medicine-metric-value {
+	color: #183a32;
+	font-size: clamp(38px, 5vw, 60px);
+	font-weight: 600;
+	line-height: 1;
+}
+
+.medicine-metric-description {
+	color: #77877f;
+	font-size: 13px;
+}
+
+@media (max-width: 720px) {
+	.medicine-metrics-grid {
+		gap: 14px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 480px) {
+	.medicine-count {
+		gap: 18px;
+	}
+
+	.medicine-metrics-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}

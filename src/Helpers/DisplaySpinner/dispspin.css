@@ -1,0 +1,30 @@
+.display-spinner {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	color: inherit;
+	font: inherit;
+}
+
+.display-spinner__indicator {
+	width: 18px;
+	height: 18px;
+	flex: 0 0 18px;
+	border: 2px solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: display-spinner-rotate 0.75s linear infinite;
+}
+
+@keyframes display-spinner-rotate {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.display-spinner__indicator {
+		animation-duration: 1.5s;
+	}
+}

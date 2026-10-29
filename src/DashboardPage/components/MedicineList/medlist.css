@@ -1,0 +1,312 @@
+
+/* =========================================
+   Global Typography
+   ========================================= */
+
+.medicine-table-section,
+.medicine-table-section .MuiTypography-root,
+.medicine-table-section .MuiButton-root,
+.medicine-table-section .MuiTableCell-root {
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* =========================================
+   Section
+   ========================================= */
+
+.medicine-table-section {
+  width: 100%;
+  padding: 24px 0;
+}
+
+
+/* =========================================
+   Header
+   ========================================= */
+
+.medicine-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 24px;
+}
+
+.medicine-table-title {
+  margin-bottom: 8px !important;
+
+  color: #101828;
+
+  font-weight: 700 !important;
+}
+
+.medicine-table-description {
+  color: #667085;
+
+  line-height: 1.6 !important;
+}
+
+
+/* =========================================
+   Add Medicine Button
+   ========================================= */
+
+.add-medicine-table-button {
+  min-height: 44px !important;
+
+  padding: 10px 20px !important;
+
+  border-radius: 8px !important;
+
+  font-family: "Poppins", sans-serif !important;
+  font-weight: 600 !important;
+
+  text-transform: none !important;
+
+  box-shadow: none !important;
+}
+
+.add-medicine-table-button:hover {
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.15) !important;
+}
+
+.add-medicine-table-button:focus-visible {
+  outline: 3px solid rgba(25, 118, 210, 0.4);
+  outline-offset: 3px;
+}
+
+
+/* =========================================
+   Table Container
+   ========================================= */
+
+.medicine-table-container {
+  width: 100%;
+
+  overflow-x: auto;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 12px !important;
+
+  background-color: #ffffff;
+}
+
+
+/* =========================================
+   Table
+   ========================================= */
+
+.medicine-table {
+  width: 100%;
+
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+
+/* =========================================
+   Table Header
+   ========================================= */
+
+.medicine-table .MuiTableHead-root {
+  background-color: #f9fafb;
+}
+
+.medicine-table .MuiTableHead-root .MuiTableCell-root {
+  padding: 16px 24px;
+
+  color: #475467;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  border-bottom: 1px solid #e4e7ec;
+}
+
+
+/* =========================================
+   Table Body
+   ========================================= */
+
+.medicine-table .MuiTableBody-root .MuiTableCell-root {
+  padding: 18px 24px;
+
+  color: #344054;
+
+  font-size: 0.9rem;
+
+  border-bottom: 1px solid #eaecf0;
+}
+
+.medicine-table .MuiTableBody-root .MuiTableRow:last-child
+.MuiTableCell-root {
+  border-bottom: none;
+}
+
+
+/* =========================================
+   Medicine Name
+   ========================================= */
+
+.medicine-name-cell {
+  font-weight: 600 !important;
+}
+
+
+/* =========================================
+   Timeline
+   ========================================= */
+
+.medicine-timeline {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 6px 12px;
+
+  color: #175cd3;
+
+  background-color: #eff8ff;
+
+  border: 1px solid #d1e9ff;
+  border-radius: 20px;
+
+  font-size: 0.8rem;
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   Actions
+   ========================================= */
+
+.medicine-table-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+}
+
+.medicine-edit-button {
+  width: 40px;
+  height: 40px;
+
+  color: #475467 !important;
+
+  border-radius: 8px !important;
+}
+
+.medicine-edit-button:hover {
+  color: #175cd3 !important;
+
+  background-color: #eff8ff !important;
+}
+
+.medicine-delete-button {
+  width: 40px;
+  height: 40px;
+
+  color: #d92d20 !important;
+
+  border-radius: 8px !important;
+}
+
+.medicine-delete-button:hover {
+  background-color: #fef3f2 !important;
+}
+
+
+/* =========================================
+   Keyboard Accessibility
+   ========================================= */
+
+.medicine-table-section .MuiIconButton-root:focus-visible {
+  outline: 3px solid rgba(25, 118, 210, 0.5);
+  outline-offset: 2px;
+}
+
+.medicine-table-section .MuiTableRow-root:focus-within {
+  background-color: #f9fafb;
+}
+
+
+/* =========================================
+   Empty State
+   ========================================= */
+
+.medicine-empty-cell {
+  padding: 40px 24px !important;
+
+  color: #667085 !important;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   Footer
+   ========================================= */
+
+.medicine-table-footer {
+  margin-top: 16px !important;
+
+  color: #667085;
+
+  font-size: 0.85rem !important;
+}
+
+
+/* =========================================
+   Responsive
+   ========================================= */
+
+@media (max-width: 600px) {
+  .medicine-table-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .add-medicine-table-button {
+    width: 100%;
+  }
+
+  .medicine-table .MuiTableHead-root .MuiTableCell-root,
+  .medicine-table .MuiTableBody-root .MuiTableCell-root {
+    padding: 14px 16px;
+  }
+
+  .medicine-table .MuiTableCell-root {
+    font-size: 0.8rem;
+  }
+
+  .medicine-table-actions {
+    gap: 4px;
+  }
+
+  .medicine-edit-button,
+  .medicine-delete-button {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+
+/* =========================================
+   Reduced Motion
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .medicine-table-section *,
+  .medicine-table-section *::before,
+  .medicine-table-section *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,150 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+*{
+  font-family: "Poppins", sans-serif !important;
+}
+
+.register-page {
+	min-height: 100vh;
+	padding: 48px 16px;
+	display: flex;
+	align-items: center;
+	background-color: #f3f7f5;
+	background-image: radial-gradient(#d8e5df 0.7px, transparent 0.7px);
+	background-size: 18px 18px;
+}
+
+.register-page > .MuiContainer-root {
+	padding: 0;
+}
+
+.register-card.MuiPaper-root {
+	max-width: 760px;
+	margin: 0 auto;
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+	border: 1px solid #e2eae5;
+	border-radius: 10px;
+	background: #fff;
+	box-shadow: 0 18px 48px rgb(29 63 47 / 9%);
+}
+
+.register-header {
+	display: grid;
+	justify-items: center;
+	gap: 10px;
+	text-align: center;
+}
+
+.register-icon {
+	width: 48px;
+	height: 48px;
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+	color: #176b4a;
+	background: #e8f4ed;
+}
+
+.register-icon svg {
+	font-size: 25px;
+}
+
+.register-title.MuiTypography-root {
+	color: #183b2d;
+	font-weight: 700;
+}
+
+.register-subtitle.MuiTypography-root {
+	max-width: 420px;
+}
+
+.register-fields {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 20px 16px;
+}
+
+.prescription-field {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px 16px;
+	padding: 16px;
+	border: 1px dashed #a8c4b4;
+	border-radius: 8px;
+	background: #f9fcfa;
+}
+
+.prescription-field h2 {
+	flex-basis: 100%;
+	margin: 0;
+	color: #244b39;
+}
+
+.optional-label {
+	margin-left: 6px;
+	color: #687970;
+	font-size: 0.8rem;
+	font-weight: 400;
+}
+
+.prescription-upload.MuiButton-root {
+	border-color: #8eaa9b;
+	color: #176b4a;
+	text-transform: none;
+}
+
+.prescription-field > .MuiTypography-root:last-child {
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.register-button.MuiButton-root {
+	min-height: 48px;
+	border-radius: 6px;
+	background-color: #176b4a;
+	font-weight: 700;
+	text-transform: none;
+}
+
+.register-button.MuiButton-root:hover {
+	background-color: #10583b;
+}
+
+.login-prompt.MuiTypography-root {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+@media (max-width: 600px) {
+	.register-page {
+		min-height: 100svh;
+		padding: 24px 12px;
+		align-items: flex-start;
+	}
+
+	.register-card.MuiPaper-root {
+		padding: 26px 18px;
+		gap: 22px;
+	}
+
+	.register-title.MuiTypography-root {
+		font-size: 1.75rem;
+	}
+
+	.register-fields {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 16px;
+	}
+
+	.prescription-field {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+}
