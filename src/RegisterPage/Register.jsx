@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   
   Box,
+  Alert,
   Button,
   Container,
   IconButton,
@@ -19,6 +20,7 @@ import {
   UploadFileOutlined,
 } from "@mui/icons-material";
 import DispSpinner from "../Helpers/DisplaySpinner/DispSpinner.jsx";
+import { signUpWithEmail } from "../Services/authService.jsx";
 import "./register.css";
 
 const calculateAge = (dateOfBirth) => {
@@ -50,18 +52,23 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [authError, setAuthError] = useState("");
+  const [success, setSuccess] = useState("");
   
 
   const updateField = (field) => (event) => {
     setForm((previous) => ({ ...previous, [field]: event.target.value }));
     setErrors((previous) => ({ ...previous, [field]: "" }));
-    
+    setAuthError("");
+    setSuccess("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (isSubmitting) return;
 
+    setAuthError("");
+    setSuccess("");
     const nextErrors = {};
 
     if (!form.firstName.trim()) nextErrors.firstName = "First name is required";
@@ -84,13 +91,28 @@ const Register = () => {
 
     setErrors(nextErrors);
     
-    if (Object.keys(nextErrors).length === 0) {
-      setIsSubmitting(true);
-      window.setTimeout(() => {
-        setIsSubmitting(false);
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const data = await signUpWithEmail(form);
+      if (data.session) {
         navigate("/dashboard");
-        
-      }, 3000);
+      } else {
+        setSuccess(
+          "Account created. Check your email to confirm your account before signing in."
+        );
+      }
+    } catch (error) {
+      setAuthError(
+        error instanceof Error
+          ? error.message
+          : "Unable to create your account. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -128,7 +150,16 @@ const Register = () => {
             </Typography>
           </Box>
 
-          
+          {authError && (
+            <Alert severity="error" role="alert" sx={{ mb: 2 }}>
+              {authError}
+            </Alert>
+          )}
+          {success && (
+            <Alert severity="success" role="status" sx={{ mb: 2 }}>
+              {success}
+            </Alert>
+          )}
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
             <Stack spacing={2.5}>
@@ -240,7 +271,6 @@ const Register = () => {
                 variant="contained"
                 size="large"
                 className="register-button"
-                onClick = {(() => navigate("/user-med-form")) }
                 disabled={isSubmitting}
                 
               >
