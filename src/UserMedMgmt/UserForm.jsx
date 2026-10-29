@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  MenuItem,
   Paper,
   TextField,
   Typography,
@@ -21,33 +20,10 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 import "./userform.css";
 
-const MEDICINE_TIMELINES = [
-  {
-    value: "1_month",
-    label: "1 Month",
-  },
-  {
-    value: "3_months",
-    label: "3 Months",
-  },
-  {
-    value: "6_months",
-    label: "6 Months",
-  },
-  {
-    value: "1_year",
-    label: "1 Year",
-  },
-  {
-    value: "long_term",
-    label: "Long Term",
-  },
-];
-
 const createMedicine = () => ({
   id: crypto.randomUUID(),
   name: "",
-  timeline: "",
+  time: "",
 });
 
 const UserMedForm = () => {
@@ -171,9 +147,9 @@ const UserMedForm = () => {
           `Medicine ${index + 1} name is required.`;
       }
 
-      if (!medicine.timeline) {
-        newErrors[`medicine_${medicine.id}_timeline`] =
-          `Please select a timeline for medicine ${index + 1}.`;
+      if (!medicine.time) {
+        newErrors[`medicine_${medicine.id}_time`] =
+          `Please select a time for medicine ${index + 1}.`;
       }
     });
 
@@ -431,8 +407,8 @@ const UserMedForm = () => {
                   variant="body2"
                   className="medicine-description"
                 >
-                  Add one or more medicines and specify how
-                  long each medicine is expected to be taken.
+                  Add one or more medicines and specify when
+                  each medicine should be taken.
                 </Typography>
 
                 <div
@@ -445,9 +421,9 @@ const UserMedForm = () => {
                         `medicine_${medicine.id}_name`
                       ];
 
-                    const medicineTimelineError =
+                    const medicineTimeError =
                       errors[
-                        `medicine_${medicine.id}_timeline`
+                        `medicine_${medicine.id}_time`
                       ];
 
                     return (
@@ -485,37 +461,26 @@ const UserMedForm = () => {
                           />
 
                           <TextField
-                            id={`medicine-timeline-${medicine.id}`}
-                            select
-                            label="Medicine timeline"
-                            value={medicine.timeline}
+                            id={`medicine-time-${medicine.id}`}
+                            type="time"
+                            label="Medicine time"
+                            value={medicine.time}
                             onChange={(event) =>
                               handleMedicineChange(
                                 medicine.id,
-                                "timeline",
+                                "time",
                                 event.target.value
                               )
                             }
                             required
                             fullWidth
                             error={Boolean(
-                              medicineTimelineError
+                              medicineTimeError
                             )}
                             helperText={
-                              medicineTimelineError
+                              medicineTimeError
                             }
-                          >
-                            {MEDICINE_TIMELINES.map(
-                              (timeline) => (
-                                <MenuItem
-                                  key={timeline.value}
-                                  value={timeline.value}
-                                >
-                                  {timeline.label}
-                                </MenuItem>
-                              )
-                            )}
-                          </TextField>
+                          />
                         </div>
 
                         <IconButton

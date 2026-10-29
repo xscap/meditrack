@@ -3,7 +3,6 @@ import {
   Avatar,
   Button,
   Box,
-  MenuItem,
   TextField,
   Typography,
   Dialog,
@@ -13,18 +12,10 @@ import {
   IconButton,
 } from "@mui/material";
 
-const MEDICINE_TIMELINES = [
-  "1 Month",
-  "3 Months",
-  "6 Months",
-  "1 Year",
-  "Long Term",
-];
-
 const createMedicine = () => ({
   id: crypto.randomUUID(),
   name: "",
-  timeline: "1 Month",
+  time: "08:00",
 });
 
 const UserDetails = ({ medicines, onSave, onLogout }) => {
@@ -71,7 +62,7 @@ const UserDetails = ({ medicines, onSave, onLogout }) => {
         <DialogContent dividers>
           <Box component="form" id="medicine-profile-form" onSubmit={saveMedicines}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Update the names and timelines in your medicine list.
+              Update the names and scheduled times in your medicine list.
             </Typography>
             {medicineDraft.map((medicine, index) => (
               <Box
@@ -89,21 +80,16 @@ const UserDetails = ({ medicines, onSave, onLogout }) => {
                   size="small"
                 />
                 <TextField
-                  select
-                  label="Timeline"
-                  value={medicine.timeline}
+                  type="time"
+                  label="Time"
+                  value={medicine.time}
                   onChange={(event) =>
-                    updateMedicine(medicine.id, "timeline", event.target.value)
+                    updateMedicine(medicine.id, "time", event.target.value)
                   }
                   sx={{ minWidth: 140 }}
                   size="small"
-                >
-                  {MEDICINE_TIMELINES.map((timeline) => (
-                    <MenuItem key={timeline} value={timeline}>
-                      {timeline}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                  required
+                />
                 <IconButton
                   type="button"
                   aria-label={`Remove medicine ${index + 1}`}
