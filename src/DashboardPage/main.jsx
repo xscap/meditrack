@@ -11,9 +11,9 @@ import "./dashboard.css";
 import "./components/MedicineCount/medcount.css";
 
 const initialMedicines = [
-  { id: 1, name: "Metformin", timeline: "3 Months" },
-  { id: 2, name: "Vitamin D3", timeline: "6 Months" },
-  { id: 3, name: "Paracetamol", timeline: "1 Month" },
+  { id: 1, name: "Metformin", time: "11:00" },
+  { id: 2, name: "Vitamin D3", time: "14:00" },
+  { id: 3, name: "Paracetamol", time: "16:00" },
 ];
 
 const Dashboard = () => {

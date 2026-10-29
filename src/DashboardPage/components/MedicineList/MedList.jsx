@@ -39,7 +39,7 @@ const MedicineTable = ({ medicines, onMedicinesChange }) => {
       {
         id: crypto.randomUUID(),
         name: "New medicine",
-        timeline: "1 Month",
+        time: "08:00",
       },
     ]);
   };
@@ -68,7 +68,7 @@ const MedicineTable = ({ medicines, onMedicinesChange }) => {
             variant="body2"
             className="medicine-table-description"
           >
-            Manage your medicines and their timelines.
+            Manage your medicines and scheduled times.
           </Typography>
         </Box>
 
@@ -90,7 +90,7 @@ const MedicineTable = ({ medicines, onMedicinesChange }) => {
         className="medicine-table-container"
       >
         <Table
-          aria-label="Patient medicines and timelines"
+          aria-label="          Patient medicines and scheduled times"
           className="medicine-table"
         >
           <TableHead>
@@ -106,7 +106,7 @@ const MedicineTable = ({ medicines, onMedicinesChange }) => {
                 component="th"
                 scope="col"
               >
-                Timeline
+                Medicine Time
               </TableCell>
 
               <TableCell
@@ -135,8 +135,8 @@ const MedicineTable = ({ medicines, onMedicinesChange }) => {
                   </TableCell>
 
                   <TableCell>
-                    <span className="medicine-timeline">
-                      {medicine.timeline}
+                    <span className="medicine-time">
+                      {medicine.time}
                     </span>
                   </TableCell>
 
