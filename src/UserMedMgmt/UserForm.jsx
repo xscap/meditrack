@@ -1,5 +1,6 @@
 
 import { useId, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Alert,
   Box,
@@ -17,6 +18,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import { saveMedicalProfile } from "../Services/authService.jsx";
 
 import "./userform.css";
 
@@ -27,6 +29,7 @@ const createMedicine = () => ({
 });
 
 const UserMedForm = () => {
+  const navigate = useNavigate();
   const firstNameId = useId();
   const middleNameId = useId();
   const lastNameId = useId();
@@ -51,6 +54,8 @@ const UserMedForm = () => {
 
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
+  const [submitError, setSubmitError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleModalClose = () => {
     setModalOpen(false);
@@ -158,34 +163,35 @@ const UserMedForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setSuccess("");
+    setSubmitError("");
 
     if (!validateForm()) {
       return;
     }
 
-    /*
-     * Backend/API logic will be added here later.
-     *
-     * Example payload:
-     *
-     * {
-     *   firstName,
-     *   middleName,
-     *   lastName,
-     *   disease,
-     *   doctorName,
-     *   age,
-     *   medicines: [...]
-     * }
-     */
-
-    setSuccess(
-      "Medical information has been validated successfully."
-    );
+    setIsSaving(true);
+    try {
+      const savedProfile = await saveMedicalProfile({
+        ...formData,
+        medicines,
+      });
+      navigate("/dashboard", {
+        replace: true,
+        state: { savedProfile },
+      });
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Unable to save medical information. Please try again."
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -279,6 +285,15 @@ const UserMedForm = () => {
                 className="medical-info-alert"
               >
                 {success}
+              </Alert>
+            )}
+            {submitError && (
+              <Alert
+                severity="error"
+                role="alert"
+                className="medical-info-alert"
+              >
+                {submitError}
               </Alert>
             )}
 
@@ -526,8 +541,9 @@ const UserMedForm = () => {
                   variant="contained"
                   size="large"
                   className="save-medical-info-button"
+                  disabled={isSaving}
                 >
-                  Save Medical Information
+                  {isSaving ? "Saving..." : "Save Medical Information"}
                 </Button>
               </div>
             </Box>

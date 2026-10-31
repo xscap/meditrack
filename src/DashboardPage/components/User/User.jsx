@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Alert,
   Avatar,
   Button,
   Box,
@@ -18,7 +19,13 @@ const createMedicine = () => ({
   time: "08:00",
 });
 
-const UserDetails = ({ medicines, onSave, onLogout }) => {
+const UserDetails = ({
+  medicines,
+  onSave,
+  onLogout,
+  isSaving,
+  saveError,
+}) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [medicineDraft, setMedicineDraft] = useState([]);
 
@@ -37,10 +44,14 @@ const UserDetails = ({ medicines, onSave, onLogout }) => {
     );
   };
 
-  const saveMedicines = (event) => {
+  const saveMedicines = async (event) => {
     event.preventDefault();
-    onSave(medicineDraft.filter((medicine) => medicine.name.trim()));
-    setDialogOpen(false);
+    const saved = await onSave(
+      medicineDraft.filter((medicine) => medicine.name.trim())
+    );
+    if (saved) {
+      setDialogOpen(false);
+    }
   };
 
   return (
@@ -64,6 +75,11 @@ const UserDetails = ({ medicines, onSave, onLogout }) => {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Update the names and scheduled times in your medicine list.
             </Typography>
+              {saveError && (
+                <Alert severity="error" role="alert" sx={{ mb: 2 }}>
+                  {saveError}
+                </Alert>
+              )}
             {medicineDraft.map((medicine, index) => (
               <Box
                 key={medicine.id}
@@ -119,8 +135,13 @@ const UserDetails = ({ medicines, onSave, onLogout }) => {
           </Button>
           <Box sx={{ display: "flex", gap: 1 }}>
             <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-            <Button type="submit" form="medicine-profile-form" variant="contained">
-              Save changes
+            <Button
+              type="submit"
+              form="medicine-profile-form"
+              variant="contained"
+              disabled={isSaving}
+            >
+              {isSaving ? "Saving..." : "Save changes"}
             </Button>
           </Box>
         </DialogActions>

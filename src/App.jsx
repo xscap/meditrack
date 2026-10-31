@@ -6,6 +6,7 @@ import Register from './RegisterPage/Register.jsx'
 import Dashboard from './DashboardPage/main.jsx'
 import ForgotPassword from './ForgotPw/ForgotPW.jsx'
 import UserMedForm from './UserMedMgmt/UserForm.jsx'
+import AuthSessionTimeout from './Services/AuthSessionTimeout.jsx'
 function App() {
   
 
@@ -13,6 +14,7 @@ function App() {
     <>
       
       <Router>
+        <AuthSessionTimeout />
         <Routes>
           <Route path='/' element={<Welcome/>}/> 
           <Route path='/login' element={<Login/>}/>

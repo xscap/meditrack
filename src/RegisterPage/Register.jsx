@@ -99,10 +99,10 @@ const Register = () => {
     try {
       const data = await signUpWithEmail(form);
       if (data.session) {
-        navigate("/dashboard");
+        navigate("/user-med-form");
       } else {
         setSuccess(
-          "Account created. Check your email to confirm your account before signing in."
+          "Account created. Confirm your email, then sign in to complete your medical information."
         );
       }
     } catch (error) {

@@ -1,5 +1,5 @@
 import  { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Alert,
   Box,
@@ -18,7 +18,10 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import DispSpinner from "../Helpers/DisplaySpinner/DispSpinner.jsx";
-import { signInWithEmail } from "../Services/authService.jsx";
+import {
+  hasMedicalProfile,
+  signInWithEmail,
+} from "../Services/authService.jsx";
 
 import "./login.css";
 
@@ -31,7 +34,8 @@ const LoginPage = () => {
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [error, setError] = useState("");
+  const location = useLocation();
+  const [error, setError] = useState(location.state?.authMessage ?? "");
 
   const navigateToOtherPage = useNavigate();
 
@@ -77,8 +81,11 @@ const LoginPage = () => {
 
     setIsSubmitting(true);
     try {
-      await signInWithEmail({ email, password });
-      navigateToOtherPage("/dashboard");
+      const { user } = await signInWithEmail({ email, password });
+      const profileExists = await hasMedicalProfile(user.id);
+      navigateToOtherPage(
+        profileExists ? "/dashboard" : "/user-med-form"
+      );
     } catch (authError) {
       setError(
         authError instanceof Error
