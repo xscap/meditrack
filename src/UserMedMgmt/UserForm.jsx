@@ -213,7 +213,7 @@ const UserMedForm = () => {
           id="scroll-modal-title"
           className="medical-info-dialog-title"
         >
-          Dummy Header
+          Hello {formData.firstName || "User"}!
         </DialogTitle>
 
         <IconButton
@@ -229,8 +229,7 @@ const UserMedForm = () => {
           className="medical-info-dialog-content"
         >
           <Typography variant="body1">
-            This is dummy modal content for now. The
-            information shown here will be updated later.
+            Welcome to MedicTrack! Before you can start using the app, please provide your basic medical information and current medicines. This will help us manage your health effectively.
           </Typography>
 
           <Button

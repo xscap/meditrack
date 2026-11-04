@@ -18,10 +18,7 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import DispSpinner from "../Helpers/DisplaySpinner/DispSpinner.jsx";
-import {
-  hasMedicalProfile,
-  signInWithEmail,
-} from "../Services/authService.jsx";
+import { signInWithEmail } from "../Services/authService.jsx";
 
 import "./login.css";
 
@@ -81,11 +78,8 @@ const LoginPage = () => {
 
     setIsSubmitting(true);
     try {
-      const { user } = await signInWithEmail({ email, password });
-      const profileExists = await hasMedicalProfile(user.id);
-      navigateToOtherPage(
-        profileExists ? "/dashboard" : "/user-med-form"
-      );
+      await signInWithEmail({ email, password });
+      navigateToOtherPage("/dashboard", { replace: true });
     } catch (authError) {
       setError(
         authError instanceof Error

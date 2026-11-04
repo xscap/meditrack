@@ -44,12 +44,8 @@ const Dashboard = () => {
         const profile = await getMedicalProfile();
         if (!active) return;
 
-        if (!profile && !location.state?.savedProfile) {
-          navigate("/user-med-form", { replace: true });
-          return;
-        }
-
-        const loadedProfile = profile ?? location.state.savedProfile;
+        const loadedProfile =
+          profile ?? location.state?.savedProfile ?? null;
         setProfile(loadedProfile);
         setMedicines(getMedicines(loadedProfile));
       } catch (loadError) {
@@ -134,10 +130,7 @@ const Dashboard = () => {
         <div className="dashboard-header-inner">
           <DateTime />
           <UserDetails
-            medicines={medicines}
-            onSave={handleMedicinesChange}
-            isSaving={isSaving}
-            saveError={error}
+            profile={profile}
             onLogout={handleLogout}
           />
         </div>
@@ -172,24 +165,28 @@ const Dashboard = () => {
           </Typography>
           <Typography>
             <strong>Name:</strong>{" "}
-            {[profile?.first_name, profile?.middle_name, profile?.last_name]
+            {[
+              profile?.first_name,
+              profile?.middle_name,
+              profile?.last_name,
+            ]
               .filter(Boolean)
-              .join(" ")}
+              .join(" ") || "—"}
           </Typography>
           <Typography>
-            <strong>Age:</strong> {profile?.age}
+            <strong>Age:</strong> {profile?.age ?? "—"}
           </Typography>
           <Typography>
-            <strong>Diagnosed condition:</strong> {profile?.disease}
+            <strong>Diagnosed condition:</strong> {profile?.disease ?? "—"}
           </Typography>
           <Typography>
-            <strong>Doctor:</strong> {profile?.doctor_name}
+            <strong>Doctor:</strong> {profile?.doctor_name ?? "—"}
           </Typography>
         </Box>
 
         <div className="medicine-metrics-grid">
           <MedicineCount count={medicines.length} />
-          <LatestMedUpdate />
+          <LatestMedUpdate medicines={medicines} />
           <Medileft />
         </div>
       </Box>

@@ -7,6 +7,7 @@ import Dashboard from './DashboardPage/main.jsx'
 import ForgotPassword from './ForgotPw/ForgotPW.jsx'
 import UserMedForm from './UserMedMgmt/UserForm.jsx'
 import AuthSessionTimeout from './Services/AuthSessionTimeout.jsx'
+import ProtectedRoute from './Services/ProtectedRoute.jsx'
 function App() {
   
 
@@ -19,9 +20,11 @@ function App() {
           <Route path='/' element={<Welcome/>}/> 
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
-          <Route path = '/dashboard' element={<Dashboard/>}/>
-          <Route path = '/forgot-password' element={<ForgotPassword/>}/>
-          <Route path = '/user-med-form' element={<UserMedForm/>}/>
+          <Route element={<ProtectedRoute/>}>
+            <Route path='/dashboard' element={<Dashboard/>}/>
+            <Route path='/forgot-password' element={<ForgotPassword/>}/>
+            <Route path='/user-med-form' element={<UserMedForm/>}/>
+          </Route>
         </Routes>
       </Router>
       
