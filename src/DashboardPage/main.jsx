@@ -12,6 +12,7 @@ import {
   saveMedicineList,
   signOut,
 } from "../Services/authService.jsx";
+import { getLocalDateKey } from "../Helpers/medicineSchedule.js";
 import "./dashboard.css";
 import "./components/MedicineCount/medcount.css";
 
@@ -35,6 +36,12 @@ const Dashboard = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => setNow(new Date()), 60000);
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -92,6 +99,19 @@ const Dashboard = () => {
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleMedicineTaken = (medicineId, isTaken) => {
+    const now = new Date();
+    setNow(now);
+    const today = getLocalDateKey(now);
+    return handleMedicinesChange(
+      medicines.map((medicine) =>
+        medicine.id === medicineId
+          ? { ...medicine, takenDate: isTaken ? today : null }
+          : medicine
+      )
+    );
   };
 
   const handleLogout = async () => {
@@ -187,7 +207,11 @@ const Dashboard = () => {
         <div className="medicine-metrics-grid">
           <MedicineCount count={medicines.length} />
           <LatestMedUpdate medicines={medicines} />
-          <Medileft />
+          <Medileft
+            count={medicines.filter(
+              (medicine) => medicine.takenDate !== getLocalDateKey(now)
+            ).length}
+          />
         </div>
       </Box>
 
@@ -196,7 +220,9 @@ const Dashboard = () => {
         <MedList
           medicines={medicines}
           onMedicinesChange={handleMedicinesChange}
+          onMedicineTaken={handleMedicineTaken}
           isSaving={isSaving}
+          now={now}
         />
       </div>
     </Box>

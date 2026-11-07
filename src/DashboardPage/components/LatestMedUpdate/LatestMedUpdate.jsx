@@ -1,46 +1,39 @@
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-
-const parseMedicineTime = (time) => {
-  if (typeof time !== "string") return null;
-
-  const match = time.trim().match(
-    /^(\d{1,2}):(\d{2})(?:\s*(AM|PM))?$/i
-  );
-  if (!match) return null;
-
-  let hours = Number(match[1]);
-  const minutes = Number(match[2]);
-  const meridiem = match[3]?.toUpperCase();
-
-  if (minutes > 59) return null;
-
-  if (meridiem) {
-    if (hours < 1 || hours > 12) return null;
-    hours = (hours % 12) + (meridiem === "PM" ? 12 : 0);
-  } else if (hours > 23) {
-    return null;
-  }
-
-  return { hours, minutes };
-};
+import {
+  getLocalDateKey,
+  getScheduledTime,
+} from "../../../Helpers/medicineSchedule.js";
 
 const getNextMedicine = (medicines, now) => {
-  return medicines.reduce((next, medicine) => {
-    const time = parseMedicineTime(medicine.time);
-    if (!time || !medicine.name?.trim()) return next;
+  const scheduledMedicines = medicines.reduce((scheduled, medicine) => {
+    const scheduledAt = getScheduledTime(now, medicine.time);
+    if (!scheduledAt || !medicine.name?.trim()) return scheduled;
 
-    const scheduledAt = new Date(now);
-    scheduledAt.setHours(time.hours, time.minutes, 0, 0);
-    if (scheduledAt <= now) {
+    if (medicine.takenDate === getLocalDateKey(now) || scheduledAt <= now) {
       scheduledAt.setDate(scheduledAt.getDate() + 1);
     }
 
-    if (!next || scheduledAt < next.scheduledAt) {
-      return { medicine, scheduledAt };
-    }
-    return next;
-  }, null);
+    scheduled.push({ medicine, scheduledAt });
+    return scheduled;
+  }, []);
+
+  if (!scheduledMedicines?.length) return null;
+
+  const nextScheduledAt = scheduledMedicines.reduce(
+    (next, scheduled) =>
+      scheduled.scheduledAt < next ? scheduled.scheduledAt : next,
+    scheduledMedicines[0].scheduledAt
+  );
+
+  return {
+    medicines: scheduledMedicines
+      .filter(
+        ({ scheduledAt }) => scheduledAt.getTime() === nextScheduledAt.getTime()
+      )
+      .map(({ medicine }) => medicine),
+    scheduledAt: nextScheduledAt,
+  };
 };
 
 const formatCountdown = (milliseconds) => {
@@ -72,6 +65,9 @@ const LatestMedUpdate = ({ medicines = [] }) => {
   const countdown = nextMedicine
     ? formatCountdown(nextMedicine.scheduledAt - now)
     : null;
+  const medicineNames = nextMedicine?.medicines
+    .map((medicine) => medicine.name)
+    .join(", ");
   const scheduledTime = nextMedicine?.scheduledAt.toLocaleTimeString(
     undefined,
     { hour: "numeric", minute: "2-digit" }
@@ -83,7 +79,7 @@ const LatestMedUpdate = ({ medicines = [] }) => {
       className="medicine-metric medicine-metric--treatments medicine-metric--next"
       aria-label={
         nextMedicine
-          ? `Next medicine ${nextMedicine.medicine.name}, ${countdown}`
+          ? `Next medicines ${medicineNames}, ${countdown}`
           : "No scheduled medicines"
       }
     >
@@ -98,9 +94,9 @@ const LatestMedUpdate = ({ medicines = [] }) => {
         component="p"
         variant="h2"
         className="medicine-metric-value"
-        title={nextMedicine?.medicine.name}
+        title={medicineNames}
       >
-        {nextMedicine?.medicine.name ?? "—"}
+        {medicineNames ?? "—"}
       </Typography>
       <Typography
         component="p"

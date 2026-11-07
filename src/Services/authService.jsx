@@ -70,10 +70,11 @@ export const saveMedicineList = async (medicines) => {
   const { data, error } = await supabase
     .from("medical_profiles")
     .update({
-      medicines: medicines.map(({ id, name, time }) => ({
+      medicines: medicines.map(({ id, name, time, takenDate }) => ({
         id,
         name: name.trim(),
         time,
+        takenDate: takenDate ?? null,
       })),
       updated_at: new Date().toISOString(),
     })
@@ -117,10 +118,11 @@ export const saveMedicalProfile = async ({
         disease: disease.trim(),
         doctor_name: doctorName.trim(),
         age: Number(age),
-        medicines: medicines.map(({ id, name, time }) => ({
+        medicines: medicines.map(({ id, name, time, takenDate }) => ({
           id,
           name: name.trim(),
           time,
+          takenDate: takenDate ?? null,
         })),
         updated_at: new Date().toISOString(),
       },

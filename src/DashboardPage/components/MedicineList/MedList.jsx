@@ -5,6 +5,7 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -27,8 +28,15 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 import { useState } from "react";
+import { getLocalDateKey, getScheduledTime } from "../../../Helpers/medicineSchedule.js";
 
-const MedicineTable = ({ medicines, onMedicinesChange, isSaving }) => {
+const MedicineTable = ({
+  medicines,
+  onMedicinesChange,
+  onMedicineTaken,
+  isSaving,
+  now,
+}) => {
   const [medicineToEdit, setMedicineToEdit] = useState(null);
   const [editError, setEditError] = useState("");
 
@@ -132,6 +140,13 @@ const MedicineTable = ({ medicines, onMedicinesChange, isSaving }) => {
               <TableCell
                 component="th"
                 scope="col"
+              >
+                Today's status
+              </TableCell>
+
+              <TableCell
+                component="th"
+                scope="col"
                 align="right"
               >
                 Actions
@@ -141,65 +156,92 @@ const MedicineTable = ({ medicines, onMedicinesChange, isSaving }) => {
 
           <TableBody>
             {medicines.length > 0 ? (
-              medicines.map((medicine) => (
-                <TableRow
-                  key={medicine.id}
-                  hover
-                >
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    className="medicine-name-cell"
-                  >
-                    {medicine.name}
-                  </TableCell>
+              medicines.map((medicine) => {
+                const isTaken =
+                  medicine.takenDate === getLocalDateKey(now);
+                const scheduledAt = getScheduledTime(now, medicine.time);
+                const isMissed =
+                  !isTaken && scheduledAt && scheduledAt <= now;
 
-                  <TableCell>
-                    <span className="medicine-time">
-                      {medicine.time}
-                    </span>
-                  </TableCell>
+                return (
+                  <TableRow key={medicine.id} hover>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      className="medicine-name-cell"
+                    >
+                      {medicine.name}
+                    </TableCell>
 
-                  <TableCell align="right">
-                    <Box className="medicine-table-actions">
-                      <Tooltip title={`Edit ${medicine.name}`}>
-                        <IconButton
-                          aria-label={`Edit ${medicine.name}`}
-                          onClick={() => {
-                            setMedicineToEdit({ ...medicine });
-                            setEditError("");
-                          }}
-                          className="medicine-edit-button"
-                          disabled={isSaving}
-                        >
-                          <EditOutlinedIcon
-                            aria-hidden="true"
-                          />
-                        </IconButton>
-                      </Tooltip>
+                    <TableCell>
+                      <span className="medicine-time">
+                        {medicine.time}
+                      </span>
+                    </TableCell>
 
-                      <Tooltip title={`Delete ${medicine.name}`}>
-                        <IconButton
-                          aria-label={`Delete ${medicine.name}`}
-                          onClick={() =>
-                            handleDelete(medicine.id)
+                    <TableCell>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Checkbox
+                          checked={isTaken}
+                          onChange={(event) =>
+                            onMedicineTaken(medicine.id, event.target.checked)
                           }
-                          className="medicine-delete-button"
                           disabled={isSaving}
+                          inputProps={{
+                            "aria-label": `Mark ${medicine.name} as taken`,
+                          }}
+                        />
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color={
+                            isTaken
+                              ? "success.main"
+                              : isMissed
+                                ? "error.main"
+                                : "text.secondary"
+                          }
                         >
-                          <DeleteOutlinedIcon
-                            aria-hidden="true"
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))
+                          {isTaken ? "Taken" : isMissed ? "Missed" : "Upcoming"}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+
+                    <TableCell align="right">
+                      <Box className="medicine-table-actions">
+                        <Tooltip title={`Edit ${medicine.name}`}>
+                          <IconButton
+                            aria-label={`Edit ${medicine.name}`}
+                            onClick={() => {
+                              setMedicineToEdit({ ...medicine });
+                              setEditError("");
+                            }}
+                            className="medicine-edit-button"
+                            disabled={isSaving}
+                          >
+                            <EditOutlinedIcon aria-hidden="true" />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title={`Delete ${medicine.name}`}>
+                          <IconButton
+                            aria-label={`Delete ${medicine.name}`}
+                            onClick={() => handleDelete(medicine.id)}
+                            className="medicine-delete-button"
+                            disabled={isSaving}
+                          >
+                            <DeleteOutlinedIcon aria-hidden="true" />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={3}
+                  colSpan={4}
                   className="medicine-empty-cell"
                 >
                   <Typography
