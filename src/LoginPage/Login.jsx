@@ -1,5 +1,5 @@
 import  { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Alert,
   Box,
@@ -18,6 +18,7 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import DispSpinner from "../Helpers/DisplaySpinner/DispSpinner.jsx";
+import { signInWithEmail } from "../Services/authService.jsx";
 
 import "./login.css";
 
@@ -30,8 +31,8 @@ const LoginPage = () => {
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const location = useLocation();
+  const [error, setError] = useState(location.state?.authMessage ?? "");
 
   const navigateToOtherPage = useNavigate();
 
@@ -41,7 +42,6 @@ const LoginPage = () => {
     setEmailError("");
     setPasswordError("");
     setError("");
-    setSuccess("");
 
     // Validate email
     if (!email.trim()) {
@@ -68,27 +68,26 @@ const LoginPage = () => {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (isSubmitting) return;
 
-    try {
-      if (!validateForm()) {
-        return;
-      }
+    if (!validateForm()) {
+      return;
+    }
 
-      /*
-       * API integration will be added later.
-       * For now, simply show a success message.
-       */
-      setIsSubmitting(true);
-      window.setTimeout(() => {
-        setIsSubmitting(false);
-        navigateToOtherPage("/dashboard");
-      }, 3000);
-    } catch (error) {
-      console.error("Login error:", error);
-      setError("Something went wrong. Please try again.");
+    setIsSubmitting(true);
+    try {
+      await signInWithEmail({ email, password });
+      navigateToOtherPage("/dashboard", { replace: true });
+    } catch (authError) {
+      setError(
+        authError instanceof Error
+          ? authError.message
+          : "Unable to sign in. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -126,16 +125,6 @@ const LoginPage = () => {
                 onClose={() => setError("")}
               >
                 {error}
-              </Alert>
-            )}
-
-            {/* Success */}
-            {success && (
-              <Alert
-                severity="success"
-                onClose={() => setSuccess("")}
-              >
-                {success}
               </Alert>
             )}
 
@@ -249,9 +238,6 @@ const LoginPage = () => {
                     onClick={() => {
                       navigateToOtherPage("/register");
                       setError("");
-                      setSuccess(
-                        "Registration functionality will be added later."
-                      );
                     }}
                   >
                     Create account
