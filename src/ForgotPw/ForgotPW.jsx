@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
+import { Link as RouterLink } from "react-router-dom";
+import { requestPasswordReset } from "../Services/authService.jsx";
 import "./forgotpw.css";
 
 const ForgotPassword = () => {
@@ -29,7 +31,7 @@ const ForgotPassword = () => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     setError("");
@@ -47,16 +49,21 @@ const ForgotPassword = () => {
       return;
     }
 
-    // Backend/API logic will be added here later.
     setLoading(true);
-
-    // Temporary simulation only.
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await requestPasswordReset(trimmedEmail);
       setSuccess(
         "If an account exists with this email, you will receive a password reset link shortly."
       );
-    }, 1000);
+    } catch (resetError) {
+      setError(
+        resetError instanceof Error
+          ? resetError.message
+          : "Unable to send a password reset link. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEmailChange = (event) => {
@@ -201,7 +208,9 @@ const ForgotPassword = () => {
             aria-label="Account navigation"
           >
             <Link
+              component={RouterLink}
               href="/login"
+              to="/login"
               className="back-to-login"
             >
               <ArrowBackOutlinedIcon

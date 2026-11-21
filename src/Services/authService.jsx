@@ -20,6 +20,29 @@ export const signInWithEmail = async ({ email, password }) => {
   return data;
 };
 
+export const requestPasswordReset = async (email) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(
+    email.trim(),
+    {
+      redirectTo: `${window.location.origin}/reset-password`,
+    }
+  );
+
+  if (error) {
+    throw error;
+  }
+};
+
+export const updatePassword = async (password) => {
+  const { data, error } = await supabase.auth.updateUser({ password });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
 export const hasMedicalProfile = async (userId) => {
   const { data, error } = await supabase
     .from("medical_profiles")
